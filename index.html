@@ -3,24 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نظام مدرسة الوليد بن عمارة - V12</title>
+  <title>نظام مدرسة الوليد بن عمارة - الإصدار النهائي</title>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Tajawal', sans-serif; background: #0f172a; color: white; min-height: 100vh; }
     .tab-active { background: #fbbf24; color: #0f172a; font-weight: 900; box-shadow: 0 0 15px rgba(251, 191, 36, 0.3); }
-    .btn-danger { background: #ef4444; color: white; padding: 10px 20px; border-radius: 12px; font-weight: bold; }
-    .btn-danger:hover { background: #dc2626; }
     .card-dark { background: #1e293b; border: 1px solid #334155; border-radius: 24px; padding: 24px; }
     input, select { background: #0f172a !important; border: 1px solid #334155 !important; color: white !important; }
+    .btn-danger { background: #ef4444; color: white; padding: 10px 20px; border-radius: 12px; font-weight: bold; transition: 0.3s; }
+    .btn-danger:hover { background: #dc2626; transform: scale(1.02); }
   </style>
 </head>
 <body class="p-4">
   <header class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center mb-8 bg-slate-800/50 p-6 rounded-[2rem] border border-slate-700">
     <div class="text-right">
       <h1 class="text-2xl font-black text-amber-500 italic">🏆 مدرسة الوليد بن عمارة</h1>
-      <p class="text-slate-400 text-xs">نظام الإدارة الشامل V12</p>
+      <p class="text-slate-400 text-xs">نظام الإدارة الشامل - التحديث الأخير V12.1</p>
     </div>
     <nav class="flex bg-slate-900 p-1 rounded-2xl mt-4 md:mt-0 border border-slate-800">
       <button onclick="switchTab('display')" id="btn-display" class="tab-active px-6 py-2 rounded-xl transition-all">الشاشة</button>
@@ -33,81 +33,68 @@
     <section id="sec-display" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></section>
 
     <section id="sec-admin" class="hidden space-y-8">
-      
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="card-dark border-amber-500/30">
-          <h4 class="text-amber-500 font-black mb-4">☁️ الربط السحابي (Firebase)</h4>
-          <input id="fb-url" type="text" placeholder="ضع رابط Firebase هنا..." class="w-full p-3 rounded-xl mb-3">
-          <button onclick="saveCloudConfig()" class="w-full bg-amber-500 text-black py-3 rounded-xl font-black">حفظ وربط البيانات</button>
+          <h4 class="text-amber-500 font-black mb-4">☁️ إعداد الربط السحابي</h4>
+          <input id="fb-url" type="text" placeholder="انسخ رابط Firebase هنا..." class="w-full p-3 rounded-xl mb-3">
+          <button onclick="saveCloudConfig()" class="w-full bg-amber-500 text-black py-3 rounded-xl font-black">تفعيل وحفظ الرابط</button>
         </div>
         <div class="card-dark border-red-500/30">
-          <h4 class="text-red-500 font-black mb-4">⚠️ منطقة الخطر</h4>
-          <p class="text-slate-400 text-xs mb-4 text-center">استخدم هذا الزر لمسح جميع البيانات والبدء من جديد (وقت الحاجة).</p>
-          <button onclick="resetAllData()" class="btn-danger w-full italic">🗑️ حذف جميع البيانات نهائياً</button>
+          <h4 class="text-red-500 font-black mb-4">⚠️ تصفير النظام</h4>
+          <p class="text-slate-400 text-xs mb-4">استخدم هذا الزر لمسح جميع المعلمين والطلاب والبدء من جديد.</p>
+          <button onclick="resetAllData()" class="btn-danger w-full">🗑️ حذف جميع البيانات تماماً</button>
         </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        
         <div class="card-dark">
-          <h3 class="text-xl font-black text-amber-500 mb-6 border-b border-slate-700 pb-2">👨‍🏫 إدارة المعلمين</h3>
-          
-          <div class="space-y-4 mb-6">
-            <p class="text-slate-400 text-sm italic">رفع يدوي:</p>
-            <div class="flex gap-2">
-              <input id="new-t-name" type="text" placeholder="اسم المعلم" class="flex-1 p-2 rounded-lg">
-              <button onclick="addTeacherManual()" class="bg-emerald-600 px-4 rounded-lg font-bold">إضافة</button>
-            </div>
+          <h3 class="text-xl font-black text-amber-500 mb-6 border-b border-slate-700 pb-2">👨‍🏫 المعلمين (إكسل ويدوي)</h3>
+          <div class="space-y-4 mb-4 text-sm italic text-slate-400">إضافة يدوي:</div>
+          <div class="flex gap-2 mb-6">
+            <input id="new-t-name" type="text" placeholder="اسم المعلم" class="flex-1 p-2 rounded-lg">
+            <button onclick="addTeacherManual()" class="bg-emerald-600 px-4 rounded-lg font-bold">إضافة</button>
           </div>
-
-          <div class="space-y-4 mb-6 border-t border-slate-700 pt-4">
-            <p class="text-slate-400 text-sm italic">رفع ملف إكسل:</p>
+          <div class="border-t border-slate-700 pt-4 space-y-3">
+            <div class="text-sm italic text-slate-400">رفع ملف إكسل المعلمين:</div>
             <input type="file" id="up-t" class="hidden" onchange="handleT()">
-            <button onclick="document.getElementById('up-t').click()" class="w-full bg-slate-700 p-3 rounded-xl border border-dashed border-slate-500">📁 اختر ملف إكسل المعلمين</button>
-            <button onclick="exportTeacherCodes()" class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold">📥 تحميل الأكواد (Excel)</button>
+            <button onclick="document.getElementById('up-t').click()" class="w-full bg-slate-700 p-3 rounded-xl border border-dashed border-slate-500 text-sm">📁 اختيار ملف إكسل</button>
+            <button onclick="exportTeacherCodes()" class="w-full bg-blue-600 p-3 rounded-xl font-bold">📥 تحميل الأكواد (Excel)</button>
           </div>
-
-          <div class="max-h-60 overflow-y-auto bg-slate-900 rounded-xl p-2">
+          <div class="max-h-60 overflow-y-auto mt-6 bg-slate-900 rounded-xl p-2">
             <table class="w-full text-right text-xs">
-              <thead class="text-slate-500 border-b border-slate-800"><tr><th class="p-2">المعلم</th><th class="p-2">الكود</th><th class="p-2 text-center">حذف</th></tr></thead>
+              <thead class="text-slate-500 border-b border-slate-800"><tr><th>المعلم</th><th>الكود</th><th class="text-center">حذف</th></tr></thead>
               <tbody id="list-t"></tbody>
             </table>
           </div>
         </div>
 
         <div class="card-dark">
-          <h3 class="text-xl font-black text-amber-500 mb-6 border-b border-slate-700 pb-2">🎓 إدارة الطلاب</h3>
-          
-          <div class="space-y-4 mb-6">
-            <p class="text-slate-400 text-sm italic">رفع يدوي:</p>
-            <div class="flex gap-2">
-              <input id="new-s-name" type="text" placeholder="اسم الطالب" class="flex-1 p-2 rounded-lg">
-              <input id="new-s-class" type="text" placeholder="الفصل" class="w-16 p-2 rounded-lg">
-              <button onclick="addStudentManual()" class="bg-emerald-600 px-4 rounded-lg font-bold">إضافة</button>
-            </div>
+          <h3 class="text-xl font-black text-amber-500 mb-6 border-b border-slate-700 pb-2">🎓 الطلاب (إكسل ويدوي)</h3>
+          <div class="space-y-4 mb-4 text-sm italic text-slate-400">إضافة يدوي:</div>
+          <div class="flex gap-2 mb-6">
+            <input id="new-s-name" type="text" placeholder="اسم الطالب" class="flex-1 p-2 rounded-lg">
+            <input id="new-s-class" type="text" placeholder="الفصل" class="w-16 p-2 rounded-lg">
+            <button onclick="addStudentManual()" class="bg-emerald-600 px-4 rounded-lg font-bold">إضافة</button>
           </div>
-
-          <div class="space-y-4 mb-6 border-t border-slate-700 pt-4">
-            <p class="text-slate-400 text-sm italic">رفع ملف إكسل:</p>
+          <div class="border-t border-slate-700 pt-4 space-y-3">
+            <div class="text-sm italic text-slate-400">رفع ملف إكسل الطلاب:</div>
             <input type="file" id="up-s" class="hidden" onchange="handleS()">
-            <button onclick="document.getElementById('up-s').click()" class="w-full bg-slate-700 p-3 rounded-xl border border-dashed border-slate-500">📁 اختر ملف إكسل الطلاب</button>
+            <button onclick="document.getElementById('up-s').click()" class="w-full bg-slate-700 p-3 rounded-xl border border-dashed border-slate-500 text-sm">📁 اختيار ملف إكسل</button>
           </div>
-
-          <div class="max-h-60 overflow-y-auto bg-slate-900 rounded-xl p-2">
+          <div class="max-h-60 overflow-y-auto mt-6 bg-slate-900 rounded-xl p-2">
             <table class="w-full text-right text-xs">
-              <thead class="text-slate-500 border-b border-slate-800"><tr><th class="p-2">الطالب</th><th class="p-2">الفصل</th><th class="p-2 text-center">حذف</th></tr></thead>
+              <thead class="text-slate-500 border-b border-slate-800"><tr><th>الطالب</th><th>الفصل</th><th class="text-center">حذف</th></tr></thead>
               <tbody id="list-s"></tbody>
             </table>
           </div>
         </div>
-
       </div>
     </section>
 
-    <section id="sec-login" class="hidden max-w-md mx-auto text-center card-dark shadow-2xl">
+    <section id="sec-login" class="hidden max-w-md mx-auto card-dark shadow-2xl text-center">
       <h2 class="text-xl font-bold mb-6 text-amber-500">دخول المعلمين</h2>
       <input id="auth-code" type="password" placeholder="أدخل كودك السري" class="w-full p-5 rounded-2xl text-center text-4xl font-black mb-6 tracking-widest">
-      <button onclick="authenticate()" class="w-full bg-amber-500 text-black py-5 rounded-2xl font-black text-xl hover:scale-95 transition-all">دخول للنظام</button>
+      <button onclick="authenticate()" class="w-full bg-amber-500 text-black py-5 rounded-2xl font-black text-xl hover:scale-95 transition-all">دخول</button>
     </section>
 
     <section id="sec-control" class="hidden max-w-2xl mx-auto card-dark shadow-2xl border-emerald-500/20">
@@ -116,19 +103,26 @@
         <select id="class-filter" onchange="updateList()" class="w-full p-4 rounded-xl font-bold"></select>
         <select id="student-select" class="w-full p-4 rounded-xl font-bold"></select>
         <input id="pts" type="number" value="1" class="w-full p-5 rounded-xl text-center text-6xl font-black text-amber-500">
-        <button onclick="addPts()" class="w-full bg-amber-500 text-black py-6 rounded-3xl font-black text-2xl shadow-xl active:scale-95 transition-all">رصد النقاط للمدرسة ✓</button>
+        <button onclick="addPts()" class="w-full bg-amber-500 text-black py-6 rounded-3xl font-black text-2xl shadow-xl active:scale-95 transition-all">رصد النقاط الآن ✓</button>
       </div>
     </section>
   </main>
 
   <script>
     function fixNums(str) { return String(str).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)); }
-    let db = { teachers: JSON.parse(localStorage.getItem('walid_t_v12') || '[{"name":"إبراهيم البركاتي","code":"7777"}]'), students: JSON.parse(localStorage.getItem('walid_s_v12') || '[]'), cloudUrl: localStorage.getItem('fb_url_v12') || '', isAuth: false, target: 'control' };
+    let db = { teachers: JSON.parse(localStorage.getItem('walid_t_v12')) || [{"name":"إبراهيم البركاتي","code":"7777"}], students: JSON.parse(localStorage.getItem('walid_s_v12')) || [], cloudUrl: localStorage.getItem('fb_url_v12') || '', isAuth: false, target: 'control' };
 
     async function syncPush() { if(!db.cloudUrl) return; try { await fetch(db.cloudUrl + '/data.json', { method: 'PUT', body: JSON.stringify({s: db.students, t: db.teachers}) }); } catch(e){} }
     async function syncPull() { if(!db.cloudUrl) return; try { const res = await fetch(db.cloudUrl + '/data.json'); const data = await res.json(); if(data){ db.students = data.s || []; db.teachers = data.t || []; render(); renderAdminLists(); } } catch(e){} }
 
-    function saveCloudConfig() { db.cloudUrl = document.getElementById('fb-url').value.trim().replace(/\/$/, ""); localStorage.setItem('fb_url_v12', db.cloudUrl); syncPush(); alert("تم الربط السحابي بنجاح!"); }
+    function saveCloudConfig() {
+      let url = document.getElementById('fb-url').value.trim();
+      if(url.endsWith('/')) url = url.slice(0, -1);
+      db.cloudUrl = url;
+      localStorage.setItem('fb_url_v12', url);
+      syncPush();
+      alert("تم الربط السحابي بنجاح!");
+    }
 
     function switchTab(t) {
       document.querySelectorAll('nav button').forEach(b => b.className = 'px-6 py-2 rounded-xl text-slate-500 transition-all');
@@ -138,47 +132,32 @@
     }
     function hide() { ['display','login','control','admin'].forEach(s=>document.getElementById('sec-'+s).classList.add('hidden')); }
 
-    function authenticate() { const c = fixNums(document.getElementById('auth-code').value); const u = db.teachers.find(x=>fixNums(x.code)===c); if(u) { db.isAuth=true; document.getElementById('welcome-txt').innerText = "أهلاً بك: " + u.name; switchTab(db.target); } else alert('كود الدخول غير صحيح'); }
+    function authenticate() { const c = fixNums(document.getElementById('auth-code').value); const u = db.teachers.find(x=>fixNums(x.code)===c); if(u) { db.isAuth=true; document.getElementById('welcome-txt').innerText = "مرحباً: " + u.name; switchTab(db.target); } else alert('كود خطأ'); }
 
-    // إضافة وحذف معلمين
+    // المعلمين
     function addTeacherManual() { const n = document.getElementById('new-t-name').value; if(n) { db.teachers.push({name:n, code:Math.floor(1000+Math.random()*9000).toString()}); syncPush(); renderAdminLists(); document.getElementById('new-t-name').value=''; } }
     function deleteT(idx) { if(confirm('حذف المعلم؟')) { db.teachers.splice(idx,1); syncPush(); renderAdminLists(); } }
-
-    // إضافة وحذف طلاب
-    function addStudentManual() { const n = document.getElementById('new-s-name').value; const c = document.getElementById('new-s-class').value; if(n && c) { db.students.push({name:n, class:c, points:0}); syncPush(); renderAdminLists(); document.getElementById('new-s-name').value=''; document.getElementById('new-s-class').value=''; } }
-    function deleteS(idx) { if(confirm('حذف الطالب؟')) { db.students.splice(idx,1); syncPush(); renderAdminLists(); } }
-
-    // تصفير كل شيء
-    function resetAllData() {
-      if(confirm('🚨 تحذير: سيتم حذف جميع الطلاب والمعلمين والبيانات تماماً. هل أنت متأكد؟')) {
-        db.students = [];
-        db.teachers = [{"name":"إبراهيم البركاتي","code":"7777"}];
-        syncPush();
-        render();
-        renderAdminLists();
-        alert('تم تصفير النظام بنجاح!');
-      }
-    }
-
-    // معالجة ملفات الإكسل
     function handleT() {
       const f = document.getElementById('up-t').files[0]; const r = new FileReader();
       r.onload = (e) => {
-        const data = new Uint8Array(e.target.result); const wb = XLSX.read(data, {type:'array'});
-        const sheet = wb.Sheets[wb.SheetNames[0]]; const json = XLSX.utils.sheet_to_json(sheet);
+        const wb = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
+        const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
         db.teachers = json.map(x => ({ name: x.الاسم || x.name, code: Math.floor(1000+Math.random()*9000).toString() }));
         db.teachers.push({"name":"إبراهيم البركاتي","code":"7777"});
-        syncPush(); renderAdminLists(); alert('تم رفع قائمة المعلمين بنجاح!');
+        syncPush(); renderAdminLists(); alert('تم رفع المعلمين!');
       }; r.readAsArrayBuffer(f);
     }
 
+    // الطلاب
+    function addStudentManual() { const n = document.getElementById('new-s-name').value; const c = document.getElementById('new-s-class').value; if(n && c) { db.students.push({name:n, class:c, points:0}); syncPush(); renderAdminLists(); document.getElementById('new-s-name').value=''; } }
+    function deleteS(idx) { if(confirm('حذف الطالب؟')) { db.students.splice(idx,1); syncPush(); renderAdminLists(); } }
     function handleS() {
       const f = document.getElementById('up-s').files[0]; const r = new FileReader();
       r.onload = (e) => {
-        const data = new Uint8Array(e.target.result); const wb = XLSX.read(data, {type:'array'});
-        const sheet = wb.Sheets[wb.SheetNames[0]]; const json = XLSX.utils.sheet_to_json(sheet);
+        const wb = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
+        const json = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
         db.students = json.map(x => ({ name: x.الاسم || x.name, class: String(x.الفصل || x.class), points: 0 }));
-        syncPush(); renderAdminLists(); render(); alert('تم رفع قائمة الطلاب بنجاح!');
+        syncPush(); renderAdminLists(); render(); alert('تم رفع الطلاب!');
       }; r.readAsArrayBuffer(f);
     }
 
@@ -186,7 +165,14 @@
       const data = db.teachers.map(t => ({ "اسم المعلم": t.name, "الكود السري": t.code }));
       const ws = XLSX.utils.json_to_sheet(data); const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "الأكواد");
-      XLSX.writeFile(wb, "أكواد_معلمين_مدرسة_الوليد.xlsx");
+      XLSX.writeFile(wb, "أكواد_المعلمين.xlsx");
+    }
+
+    function resetAllData() {
+      if(confirm('سيتم مسح كل شيء نهائياً، هل أنت متأكد؟')) {
+        db.students = []; db.teachers = [{"name":"إبراهيم البركاتي","code":"7777"}];
+        syncPush(); render(); renderAdminLists(); alert('تم التصفير!');
+      }
     }
 
     function renderAdminLists() {
@@ -194,12 +180,17 @@
       document.getElementById('list-s').innerHTML = db.students.map((s,i)=>`<tr class="border-b border-slate-800"><td>${s.name}</td><td>${s.class}</td><td class="text-center"><button onclick="deleteS(${i})" class="text-red-500">✖</button></td></tr>`).join('');
     }
 
-    function render() { const board = document.getElementById('sec-display'); const sorted = [...db.students].sort((a,b)=>b.points-a.points).slice(0,12); board.innerHTML = sorted.length ? sorted.map((s,i)=>`<div class="p-6 rounded-3xl text-center bg-slate-800 border border-slate-700"><div>${i===0?'🥇':i===1?'🥈':'👤'}</div><h3 class="font-black text-white">${s.name}</h3><p class="text-slate-500 text-xs">${s.class}</p><div class="text-4xl font-black text-amber-500">${s.points}</div></div>`).join('') : "<div class='col-span-full opacity-20 text-center'>بانتظار إضافة الطلاب...</div>"; }
+    function render() {
+      const board = document.getElementById('sec-display');
+      const sorted = [...db.students].sort((a,b)=>b.points-a.points).slice(0,12);
+      board.innerHTML = sorted.length ? sorted.map((s,i)=>`<div class="p-6 rounded-3xl text-center bg-slate-800 border border-slate-700"><div>${i===0?'🥇':i===1?'🥈':'👤'}</div><h3 class="font-black text-white">${s.name}</h3><p class="text-slate-500 text-xs">${s.class}</p><div class="text-4xl font-black text-amber-500">${s.points}</div></div>`).join('') : "<div class='col-span-full opacity-20 text-center'>بانتظار البيانات...</div>";
+    }
+
     function initC() { const cls = [...new Set(db.students.map(s=>s.class))].sort(); document.getElementById('class-filter').innerHTML = '<option value="all">كل الفصول</option>' + cls.map(c=>`<option value="${c}">${c}</option>`).join(''); updateList(); }
     function updateList() { const f = document.getElementById('class-filter').value; const filtered = f==='all'?db.students:db.students.filter(s=>s.class===f); document.getElementById('student-select').innerHTML = filtered.map(s=>`<option value="${db.students.indexOf(s)}">${s.name}</option>`).join(''); }
-    async function addPts() { const i = document.getElementById('student-select').value; const p = parseInt(fixNums(document.getElementById('pts').value) || 0); db.students[i].points += p; await syncPush(); alert('تم رصد النقاط بنجاح!'); render(); }
-    
-    setInterval(syncPull, 7000); 
+    async function addPts() { const i = document.getElementById('student-select').value; const p = parseInt(fixNums(document.getElementById('pts').value) || 0); if(i==="") return; db.students[i].points += p; await syncPush(); alert('تم الرصد!'); render(); }
+
+    setInterval(syncPull, 5000);
     window.onload = () => { if(db.cloudUrl) document.getElementById('fb-url').value = db.cloudUrl; render(); };
   </script>
 </body>
